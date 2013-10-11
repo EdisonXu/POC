@@ -1,0 +1,68 @@
+
+package data;
+
+// How to generate
+// ===============
+// $ cd example
+// $ protoc src/main/com/purang/func/pack/common/protobuf/ProtobufferResponseData.proto --java_out=src/main/java
+
+option optimize_for = SPEED;
+
+message ProtobufColumnInfo{
+	enum ColumnType {
+	  INT32 = 0;   
+	  INT64 = 1;   
+	  DOUBLE = 2; 
+	  STRING = 3; 
+	  RAW = 4;
+	  SINT32 = 5;
+	  SINT64 = 6;
+	  FIXED32 = 7;
+	  FIXED64 = 8;
+	  BOOL = 9;
+	  FLOAT = 10;
+	  UNKNOW = 11;
+	}
+
+	required string name=1;
+	required ColumnType type=2;
+	optional int32 precision  =3;
+}
+
+
+message RowValue{
+
+		message ColumnValue{
+			optional int32 int32Value=1;//带符号整性
+			optional int64 int64Value=2;//带符号整性
+			optional double doubleValue=3;
+			optional string stringValue=4;
+			optional bytes bytesValue=5;
+			
+			
+			optional sint32 sint32Value=6;//负数采用zigzag编码
+			optional sint64 sint64Value=7;//负数采用zigzag编码
+			
+			optional fixed32 fixed32Value=8;//固定长度整性，如果数值大于2^28
+			optional fixed64 fixed64Value=9;//固定长度整性，如果数值大于2^56
+			
+			optional bool boolValue=10;
+			optional float floatValue=11;
+		}
+
+	repeated ColumnValue columnValue=1;
+}
+
+message ProtobufResponseData{
+	repeated ProtobufColumnInfo columnInfo = 1;
+	repeated RowValue rowValue = 2;
+}
+
+message ResponseRepeatData{
+	repeated ProtobufResponseData data=1;
+}
+
+
+
+
+

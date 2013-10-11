@@ -1,0 +1,46 @@
+
+package common;
+
+// How to generate
+// ===============
+// $ cd example
+// $ protoc src/main/com/purang/func/pack/common/CommonCommunicationProtocol.proto --java_out=src/main/java
+
+
+option optimize_for = SPEED;
+
+message CommonRequest{
+	required int32 cmd = 1;
+	required int32 sequence = 2;
+	required string package = 3;
+	required string function = 4;
+	repeated string arg = 5;
+	optional string userIp = 6;
+	optional string userName = 7;
+	optional int32 productId = 8;
+	optional float version = 9;
+}
+
+message CommonResponse{
+	required int32 cmd = 1;
+	required int32 sequence = 2;
+	required int32 ret=3;
+	optional CommonResponseData data=4;
+}
+
+message CommonResponseData{
+	enum ResponseType {
+	  JSON = 0;   
+	  BINARY = 1;  
+	  MULTI_BINARY = 2;   
+	  FIX = 3; 
+	  HTML = 4; 
+	  MULTI_BINARY_NAME = 5;
+	  PROTOBUF = 6;
+	}
+	
+	required ResponseType type = 1;
+	optional int32 frame=2;
+	required bytes data=3;
+}
+

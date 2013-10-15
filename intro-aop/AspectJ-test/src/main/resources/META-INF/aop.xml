@@ -1,0 +1,5 @@
+<aspectj>
+    <aspects>
+        <aspect name="com.edi.poc.aop.MyAspect"/>
+    </aspects>
+</aspectj>

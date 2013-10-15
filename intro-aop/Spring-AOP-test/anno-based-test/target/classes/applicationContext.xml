@@ -1,0 +1,31 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:aop="http://www.springframework.org/schema/aop"
+      xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+    <!-- Configure Target Objects -->
+    <bean id="zoo" class="com.edi.poc.Zoo">
+        <constructor-arg value="People"/>
+    </bean>
+    <bean id="dinoHall" class="com.edi.poc.DinoHall"/>
+    <bean id="jack" class="com.edi.poc.Tourer">
+        <constructor-arg value="Jack"/>
+    </bean>
+
+    <bean id="myAspect" class="com.edi.poc.aop.MyAspect"/>
+    
+    <!-- <aop:config>
+        <aop:aspect id="customAspect" ref="myAspect">
+            @Before
+            <aop:pointcut id="pointcutBefore" expression="execution(* com.edi.poc.Zoo.enter(..))"/>
+            <aop:pointcut id="pointcutAfter" expression="execution(* com.edi.poc.ifc.Hall.visit(..))"/>
+            <aop:before method="before" pointcut-ref="pointcutBefore"/>
+            <aop:after-returning method="after" pointcut-ref="pointcutAfter"/>
+        </aop:aspect>
+    </aop:config> -->
+    <aop:aspectj-autoproxy/>
+    
+    <context:component-scan base-package="com.edi.poc"/> 
+</beans>

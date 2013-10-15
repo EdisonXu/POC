@@ -1,0 +1,76 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:aop="http://www.springframework.org/schema/aop"
+      xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+    <!-- Configure Target Objects -->
+    <bean id="zoo" class="com.edi.poc.Zoo">
+        <constructor-arg value="People"/>
+    </bean>
+    <bean id="dinoHall" class="com.edi.poc.DinoHall"/>
+    <bean id="jack" class="com.edi.poc.Tourer">
+        <constructor-arg value="Jack"/>
+    </bean>
+
+    <!-- Configure pointcut -->
+    <bean id="customPointcut" class="org.springframework.aop.support.NameMatchMethodPointcut">
+        <property name="mappedName" value="enter"/>
+    </bean>
+    <bean id="customPointcut2" class="org.springframework.aop.support.NameMatchMethodPointcut">
+        <property name="mappedName" value="visit"/>
+    </bean>
+    
+    <!-- Configure Advice -->
+    <bean id="myBeforeAdvice" class="com.edi.poc.aop.MyBeforeMethod"/>
+    <bean id="myAfterAdvice" class="com.edi.poc.aop.MyAfterMethod"/>
+    
+    <!-- Configure Advisor -->
+    <bean id="customAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="pointcut" ref="customPointcut"/>
+        <property name="advice" ref="myBeforeAdvice"/>
+    </bean>
+    
+    <bean id="customAdvisor2" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="pointcut" ref="customPointcut2"/>
+        <property name="advice" ref="myAfterAdvice"/>
+    </bean>
+    
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <!-- Configure the name filter -->
+        <property name="beanNames" value="*zoo"></property>
+        <property name="interceptorNames" value="customAdvisor"></property>
+    </bean>
+    
+    <!--
+    <bean id="customServiceProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+            <property name="target" ref="zoo"/>
+            
+            <property name="interceptorNames">
+                <list>
+                    <value>customAdvisor</value>
+                </list>
+            </property>
+            
+            <property name="proxyTargetClass">
+                <value>true</value>
+            </property>
+            
+    </bean>
+    -->
+    <bean id="customServiceProxy2" class="org.springframework.aop.framework.ProxyFactoryBean">
+            <property name="target" ref="dinoHall"/>
+            
+            <property name="interceptorNames">
+                <list>
+                    <value>customAdvisor2</value>
+                </list>
+            </property>
+            <!--
+            <property name="proxyTargetClass">
+                <value>true</value>
+            </property>
+            -->
+    </bean>
+</beans>

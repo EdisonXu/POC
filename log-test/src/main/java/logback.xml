@@ -1,0 +1,36 @@
+<configuration>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- encoders are assigned the type
+         ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+  
+  <appender name="tappender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+  	<file>D:\test.log</file>
+  	<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <fileNamePattern>${storm.home}/logs/${logfile.name}.%i</fileNamePattern>
+      <minIndex>1</minIndex>
+      <maxIndex>9</maxIndex>
+    </rollingPolicy>
+
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>100MB</maxFileSize>
+    </triggeringPolicy>
+
+    <encoder>
+      <pattern>%d %c{1} [%p] &lt;%t&gt; %m%n</pattern>
+    </encoder>
+  </appender>
+  
+  <root level="debug">
+    <appender-ref ref="STDOUT" />
+  </root>
+  
+  <logger name="com.edi.poc" additivity="false">
+    <appender-ref ref="tappender" />
+  </logger>
+  
+</configuration>

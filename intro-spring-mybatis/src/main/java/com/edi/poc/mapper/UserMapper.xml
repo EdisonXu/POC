@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.edi.poc.mapper.UserMapper">
+    <select id="getAllUsers" resultType="com.edi.poc.domain.User">    <!-- 查询表中的所有用户 -->
+        select * from tb_user order by name asc
+    </select>
+    
+    <insert id="saveUser" parameterType="com.edi.poc.domain.User">    <!-- 向数据库中插入用户 -->
+        insert into tb_user(name,password,sex,age) values(#{name},#{password},#{sex},#{age})
+    </insert>
+    
+    <update id="updateUser" parameterType="com.edi.poc.domain.User">     <!-- 更新库中的用户 -->
+        update tb_user set name=#{name},password=#{password},sex=#{sex},age=#{age} where name=#{name}
+    </update>
+    
+    <delete id="deleteUser" parameterType="String">    <!-- 删除用户 -->
+        delete from tb_user where name=#{name}
+    </delete>
+    
+    <!-- <select id="findByname" parameterType="String" resultType="com.edi.poc.domain.User"> 根据用户名查找用户
+        select * from tb_user where name=#{name}
+    </select> -->
+</mapper>

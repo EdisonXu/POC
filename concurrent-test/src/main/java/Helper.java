@@ -35,12 +35,6 @@ public enum Helper {
         }
     }
 
-    public static void print(int... input){
-        for(int each:input){
-            System.out.print(each);
-        }
-    }
-
     public void run(Runnable r){
         tPool.submit(r);
     }

@@ -39,8 +39,11 @@ public class MethodFour{
 
 
     public static void main(String args[]){
+        long start = System.currentTimeMillis();
         MethodFour four = new MethodFour();
         Helper.instance.run(four.newThreadOne());
         Helper.instance.shutdown();
+        long end = System.currentTimeMillis();
+        System.out.println("耗时: " + (end - start));
     }
 }

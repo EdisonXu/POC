@@ -39,9 +39,12 @@ public class MethodSeven {
     }
 
     public static void main(String args[]){
+        long start = System.currentTimeMillis();
         MethodSeven seven = new MethodSeven();
         Helper.instance.run(seven.newThreadOne());
         Helper.instance.run(seven.newThreadTwo());
         Helper.instance.shutdown();
+        long end = System.currentTimeMillis();
+        System.out.println("耗时: " + (end - start));
     }
 }

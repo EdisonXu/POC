@@ -37,13 +37,10 @@ public class MethodFive {
     }
 
     public static void main(String args[]) throws InterruptedException {
-        long start = System.currentTimeMillis();
         MethodFive five = new MethodFive();
         Helper.instance.run(five.newThreadOne());
         Helper.instance.run(five.newThreadTwo());
         Helper.instance.shutdown();
-        long end = System.currentTimeMillis();
-        System.out.println("耗时: " + (end - start));
     }
 
 }

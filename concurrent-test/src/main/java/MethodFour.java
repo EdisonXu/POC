@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
@@ -6,17 +9,24 @@ import java.util.concurrent.CyclicBarrier;
  */
 public class MethodFour{
 
+    private final CyclicBarrier barrier;
+    private final List<String> list;
+
+    public MethodFour() {
+        list = Collections.synchronizedList(new ArrayList<String>());
+        barrier = new CyclicBarrier(2,newBarrierAction());
+    }
 
     public Runnable newThreadOne() {
         final String[] inputArr = Helper.buildNoArr(52);
         return new Runnable() {
             private String[] arr = inputArr;
-            private CyclicBarrier barrier;
+
             public void run() {
                 for (int i = 0, j=0; i < arr.length; i=i+2,j++) {
                     try {
-                        barrier = new CyclicBarrier(1, newThreadTwo(j));
-                        Helper.print(arr[i],arr[i+1]);
+                        list.add(arr[i]);
+                        list.add(arr[i+1]);
                         barrier.await();
                     } catch (InterruptedException | BrokenBarrierException e) {
                         e.printStackTrace();
@@ -26,24 +36,39 @@ public class MethodFour{
         };
     }
 
-    private Runnable newThreadTwo(int seq) {
+    public Runnable newThreadTwo() {
         final String[] inputArr = Helper.buildCharArr(26);
         return new Runnable() {
 
             private String[] arr = inputArr;
             public void run() {
-                Helper.print(arr[seq]);
+                for (int i = 0; i < arr.length; i++) {
+                    try {
+                        list.add(arr[i]);
+                        barrier.await();
+                    } catch (InterruptedException | BrokenBarrierException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         };
     }
 
+    private Runnable newBarrierAction(){
+        return new Runnable() {
+            @Override
+            public void run() {
+                Collections.sort(list);
+                list.forEach(c->System.out.print(c));
+                list.clear();
+            }
+        };
+    }
 
     public static void main(String args[]){
-        long start = System.currentTimeMillis();
         MethodFour four = new MethodFour();
         Helper.instance.run(four.newThreadOne());
+        Helper.instance.run(four.newThreadTwo());
         Helper.instance.shutdown();
-        long end = System.currentTimeMillis();
-        System.out.println("耗时: " + (end - start));
     }
 }

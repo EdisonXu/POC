@@ -38,13 +38,54 @@ public class MethodSeven {
         };
     }
 
-    public static void main(String args[]){
-        long start = System.currentTimeMillis();
+    private final LinkedBlockingQueue<String> queue1 = new LinkedBlockingQueue<>();
+    private final LinkedBlockingQueue<String> queue2 = new LinkedBlockingQueue<>();
+
+    public Runnable newThreadThree() {
+        final String[] inputArr = Helper.buildNoArr(52);
+        return new Runnable() {
+            private String[] arr = inputArr;
+            public void run() {
+                for (int i = 0; i < arr.length; i=i+2) {
+                    Helper.print(arr[i], arr[i + 1]);
+                    try {
+                        queue2.put("TwoToGo");
+                        queue1.take();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+    }
+
+    public Runnable newThreadFour() {
+        final String[] inputArr = Helper.buildCharArr(26);
+        return new Runnable() {
+            private String[] arr = inputArr;
+
+            public void run() {
+                for (int i = 0; i < arr.length; i++) {
+                    try {
+                        queue2.take();
+                        Helper.print(arr[i]);
+                        queue1.put("OneToGo");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+    }
+
+    public static void main(String args[]) throws InterruptedException {
         MethodSeven seven = new MethodSeven();
         Helper.instance.run(seven.newThreadOne());
         Helper.instance.run(seven.newThreadTwo());
+        Thread.sleep(2000);
+        System.out.println("");
+        Helper.instance.run(seven.newThreadThree());
+        Helper.instance.run(seven.newThreadFour());
         Helper.instance.shutdown();
-        long end = System.currentTimeMillis();
-        System.out.println("耗时: " + (end - start));
     }
 }

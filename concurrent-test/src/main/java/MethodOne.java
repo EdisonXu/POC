@@ -55,12 +55,9 @@ public class MethodOne {
     }
 
     public static void main(String args[]) throws InterruptedException {
-        long start = System.currentTimeMillis();
         MethodOne one = new MethodOne();
         Helper.instance.run(one.newThreadOne());
         Helper.instance.run(one.newThreadTwo());
         Helper.instance.shutdown();
-        long end = System.currentTimeMillis();
-        System.out.println("耗时: " + (end - start));
     }
 }

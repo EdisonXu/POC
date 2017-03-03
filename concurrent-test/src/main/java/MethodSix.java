@@ -88,13 +88,10 @@ public class MethodSix {
     }
 
     public static void main(String args[]) throws IOException {
-        long start = System.currentTimeMillis();
         MethodSix six = new MethodSix();
         Helper.instance.run(six.newThreadOne());
         Helper.instance.run(six.newThreadTwo());
         Helper.instance.shutdown();
         six.shutdown();
-        long end = System.currentTimeMillis();
-        System.out.println("耗时: " + (end - start));
     }
 }
